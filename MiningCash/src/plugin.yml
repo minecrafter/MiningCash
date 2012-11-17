@@ -1,0 +1,20 @@
+name: MiningCash
+main: com.tropicalwikis.tuxcraft.plugins.miningcash.MiningCash
+version: 0.5
+author: tuxed
+softdepend: ["Vault"]
+permissions:
+    miningcash.*:
+        description: Gives access to all MiningCash features.
+        children:
+            miningcash.reward: true
+            miningcash.admin: true
+    miningcash.reward:
+        description: Allows for mining rewards.
+        default: op
+    miningcash.admin:
+        description: Allows adjusting mining rewards, inflating the economy and causing a downfall.
+        default: op
+commands:
+    mining:
+        description: Adjust the MiningCash reward economy

@@ -1,0 +1,4 @@
+flat-pay: false
+message-reward: "You have been awarded %amount% for mining this ore."
+ignore-riskiness: false
+per-region-quotients:
