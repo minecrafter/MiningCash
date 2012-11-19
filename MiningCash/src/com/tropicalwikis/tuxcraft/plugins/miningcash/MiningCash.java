@@ -142,7 +142,11 @@ public class MiningCash extends JavaPlugin implements Listener {
 	}
 
 	private double calculateOreReward(Block b) {
-		return calculateOreReward(blockToString(b));
+		double v = calculateOreReward(blockToString(b));
+		if (v == 0.0) {
+			v = calculateOreReward(String.valueOf(b.getTypeId()));
+		}
+		return v;
 	}
 
 	private String locationToString(Location l) {
@@ -155,7 +159,11 @@ public class MiningCash extends JavaPlugin implements Listener {
 	}
 
 	private boolean minedBlockCanBeRewarded(Block b) {
-		return minedBlockCanBeRewarded(blockToString(b));
+		if (minedBlockCanBeRewarded(blockToString(b))) {
+			return true;
+		} else {
+			return minedBlockCanBeRewarded(String.valueOf(b.getTypeId()));
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
