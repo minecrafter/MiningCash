@@ -28,10 +28,8 @@
 
 package com.tropicalwikis.tuxcraft.plugins.miningcash;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Logger;
-import java.util.Random;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -61,10 +59,9 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
  */
 public class MiningCash extends JavaPlugin implements Listener {
 	private Economy econ;
-	private ArrayList<String> recentlyPlacedOres = new ArrayList<String>();
-	private HashMap<String, Double> rewardsHidden = new HashMap<String, Double>();
+	private List<String> recentlyPlacedOres = new ArrayList<String>();
+	private Map<String, Double> rewardsHidden = new HashMap<String, Double>();
 	private Random rnd = new Random();
-	private Logger log = Logger.getLogger("Minecraft");
 	private WorldGuardPlugin wgplugin = null;
 	private double quotient = 0.0;
 	private double bonusQuotient = 1.0;
@@ -72,14 +69,14 @@ public class MiningCash extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		if (!setupEconomy()) {
-			log.severe("Vault not found! Disabling plugin.");
+			getLogger().severe("Vault not found! Disabling plugin.");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
 		Plugin wgTmpPlugin = getServer().getPluginManager().getPlugin(
 				"WorldGuard");
 		if (wgTmpPlugin == null) {
-			log.info("WorldGuard not found. Region-specific quotients are disabled.");
+            getLogger().info("WorldGuard not found. Region-specific quotients are disabled.");
 		} else {
 			wgplugin = (WorldGuardPlugin) wgTmpPlugin;
 		}
@@ -110,7 +107,6 @@ public class MiningCash extends JavaPlugin implements Listener {
 	public void onDisable() {
 		econ = null;
 		rnd = null;
-		log = null;
 		rewardsHidden = null;
 		recentlyPlacedOres = null;
 		wgplugin = null;
@@ -159,11 +155,7 @@ public class MiningCash extends JavaPlugin implements Listener {
 	}
 
 	private boolean minedBlockCanBeRewarded(Block b) {
-		if (minedBlockCanBeRewarded(blockToString(b))) {
-			return true;
-		} else {
-			return minedBlockCanBeRewarded(String.valueOf(b.getTypeId()));
-		}
+        return minedBlockCanBeRewarded(blockToString(b)) || minedBlockCanBeRewarded(String.valueOf(b.getTypeId()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
