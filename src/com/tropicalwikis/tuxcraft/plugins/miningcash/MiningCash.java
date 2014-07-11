@@ -55,7 +55,7 @@ import java.util.*;
  */
 public class MiningCash extends JavaPlugin implements Listener {
     private Economy econ;
-    private List<String> recentlyPlacedOres = new ArrayList<String>();
+    private Set<Block> recentlyPlacedOres = new HashSet<Block>();
     private Map<String, Double> rewardsHidden = new HashMap<String, Double>();
     private Random rnd = new Random();
     private WorldGuardPlugin wgplugin = null;
@@ -157,7 +157,7 @@ public class MiningCash extends JavaPlugin implements Listener {
         if (evt.isCancelled() || !minedBlockCanBeRewarded(evt.getBlockPlaced()) || getConfig().getBoolean("ignore-riskiness", false)) {
             return;
         }
-        recentlyPlacedOres.add(locationToString(evt.getBlock().getLocation()));
+        recentlyPlacedOres.add(evt.getBlock());
     }
 
     // MiningCash only monitors what happens in the end.
@@ -169,11 +169,9 @@ public class MiningCash extends JavaPlugin implements Listener {
 
         // Riskness checks
         if (!getConfig().getBoolean("ignore-riskiness", false)) {
-            if (recentlyPlacedOres.contains(locationToString(evt.getBlock()
-                    .getLocation()))) {
+            if (recentlyPlacedOres.contains(evt.getBlock())) {
                 // just return here
-                recentlyPlacedOres.remove(locationToString(evt.getBlock()
-                        .getLocation()));
+                recentlyPlacedOres.remove(evt.getBlock());
                 return;
             }
             if (evt.getPlayer().getGameMode() == org.bukkit.GameMode.CREATIVE) {
